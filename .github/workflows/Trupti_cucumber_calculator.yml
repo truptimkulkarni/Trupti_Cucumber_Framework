@@ -26,7 +26,7 @@ jobs:
       - name: Build using maven
         run: mvn clean install
   test:
-    runs-on: ${{  needs.build.outputs.runs-on }}
+    runs-on: ${{ needs.build.outputs.runs-on }}
     steps:
       - name:  Run-Test
         run:  mvn test -D"cucumber.filter.tags=@ui"
