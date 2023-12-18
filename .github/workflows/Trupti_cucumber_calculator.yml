@@ -26,7 +26,6 @@ jobs:
       - name: Build using maven
         run: mvn clean install
   test:
-      needs: build
       runs-on: ${{  needs.build.outputs.runs-on }}
       steps:
         - name:  Run-Test
