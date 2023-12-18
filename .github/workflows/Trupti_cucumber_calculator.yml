@@ -8,11 +8,8 @@ on:
     - cron: '30 14 * * MON-FRI'
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-latest]
+  build-and-test:
+    runs-on: windows-latest
     steps:
       - name: Checkout to repository
         uses: actions/checkout@v3
@@ -22,32 +19,22 @@ jobs:
         with:
           java-version: '21'
           distribution: 'adopt'
-        continue-on-error: true
 
       - name: Download and setup Maven
         uses: stCarolas/setup-maven@v4.4
         with:
           maven-version: 3.6.3
 
-      - name: Build using Maven
-        run: mvn clean install
-
-  test:
-    needs: build
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-latest]
-    steps:
-      - name: Run Test
-        run: mvn test -D"cucumber.filter.tags=@ui"
+      - name: Build and Run Tests
+        run: |
+          mvn clean install
+          mvn test -D"cucumber.filter.tags=@ui"
         env:
           Display: ':19'
           CUCUMBER_PUBLISH_TOKEN: d63d365a-79c0-4dd8-b216-2277ba15d362
-        continue-on-error: true
 
-      - uses: actions/upload-artifact@v3
-        if: always()
+      - name: Upload Test Artifacts
+        uses: actions/upload-artifact@v3
         with:
           name: Report
           path: test-output
