@@ -35,6 +35,7 @@ jobs:
             Display:  :19
             CUCUMBER_PUBLISH_TOKEN:  d63d365a-79c0-4dd8-b216-2277ba15d362
             continue-on-error:  true
+        
         - uses:  actions/upload-artifact@v3
           if: always()
           with:
